@@ -1,0 +1,26 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
+
+module.excports = {
+    data: new SlashCommandBuilder()
+        .setName('kullanıcı')
+        .setDescription('Kullanıcı Bilgilerini Gösterir.')
+        .addUserOption(option =>
+            option.setName('user')
+            .setDescription('Kullanıcı Bilgilerini Göstermek İstediğiniz Kullanıcının Adını Yazınız.')
+            .setRequired(true)),
+    async execute(interaction) {
+        const veri = interaction.options.getUser("user") || interaction.user
+        const embed = new MessageEmbed()
+            .setColor('RANDOM')
+            .setTitle(`${veri.username} Adlı Kişinin Bilgileri`)
+            .addField('ID', veri.id)
+            .addField('Kullanıcı Adı', veri.username)
+            .addField('Kullanıcı Rolü', veri.roles.cache.map(role => role.name).join(', '))
+            .addField('Kullanıcı Kanal Sayısı', veri.channels.cache.size)
+            .addField('Kullanıcı Oluşturma Tarihi', veri.createdAt)
+            .setThumbnail(veri.avatarURL({ dynamic: true, size: 256 }))
+            .setFooter({ text: `Batuhantrkgl ♡ Discord.js` })
+        await interaction.reply({ embeds: [embed] });
+    }
+}
